@@ -1,0 +1,6 @@
+@LED.Web.API_HostAddress = http://localhost:5023
+
+GET {{LED.Web.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
