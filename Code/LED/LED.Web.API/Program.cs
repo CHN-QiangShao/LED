@@ -14,7 +14,11 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer(); // 添加 API 端点元数据服务，  用于支持 swagger
         builder.Services.AddSwaggerGen();           // 添加 swagger 文档生成服务，用于生成 API 文档
-        builder.Services.AddHostedService<ShowContent>();   // 添加后台服务
+        //builder.Services.AddHostedService<ShowContent>();   // 添加后台服务
+		// 需要添加单例实例服务，否则会报错 System.InvalidOperationException: Unable to resolve service for type 'LED.DLL.LedValue' while attempting to activate 'LED.Web.API.Controllers.LedController'
+		// 表明在尝试激活 LedController 时，ASP.NET Core 的依赖注入容器无法解析 LED.DLL.LedValue 类型的服务。
+		// 即在依赖注入容器在创建 LedController 实例时，找不到用于注入 LedValue 参数的合适服务。
+        builder.Services.AddSingleton<LedValue>();  // 添加 单例实例服务
 
         // 3、构建 web 应用程序
         var app = builder.Build();

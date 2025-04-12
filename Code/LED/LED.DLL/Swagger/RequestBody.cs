@@ -1,6 +1,9 @@
 ﻿namespace LED.DLL;
 
-public class LedDto
+/// <summary>
+/// swagger 请求体类
+/// </summary>
+public class RequestBody
 {
     /// <summary>
     /// 任务类型
