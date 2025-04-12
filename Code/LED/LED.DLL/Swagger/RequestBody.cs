@@ -8,7 +8,7 @@ public class RequestBody
     /// <summary>
     /// 任务类型
     /// </summary>
-    public TaskType taskType { get; set; }
+    public string taskType { get; set; } = string.Empty;
     /// <summary>
     /// 端拾器名
     /// </summary>

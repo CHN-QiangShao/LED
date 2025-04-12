@@ -116,4 +116,9 @@ public class LedValue
     public int nonRotate                = 0; // 不旋转
     public int singleCharacterRotate    = 1; // 单字旋转
     public int areaRotate               = 2; // 区域旋转
+
+    /// <summary>
+    /// 12×12 字体模板下单行最多显示 10 个英文字符
+    /// </summary>
+    public int longText = 10;
 }

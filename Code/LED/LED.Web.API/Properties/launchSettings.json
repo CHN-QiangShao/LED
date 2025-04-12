@@ -1,39 +1,68 @@
-﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:27801",
-      "sslPort": 44313
-    }
-  },
+﻿// launchSettings.json 作用：配置应用程序启动时的各种设置，比如环境变量、启动 URL、执行方式等等
+// launchSettings.json 只在本地开发时使用，不会被部署到生产环境，生产环境的配置一般通过环境变量或 appsettings.json 来管理
+// 最好不要删除 launchSettings.json，如果删除影响如下：
+//  在开发过程中可能会带来不便：项目在启动时会使用默认的配置，默认使用 Kestrel 服务器，默认监听 5000 和 5001 端口，默认环境变量 Production。
+//  项目不完整或者不规范。
+
+//{
+//  "$schema": "http://json.schemastore.org/launchsettings.json",
+//  "iisSettings": {
+//    "windowsAuthentication": false,
+//    "anonymousAuthentication": true,
+//    "iisExpress": {
+//      "applicationUrl": "http://localhost:27801",
+//      "sslPort": 44313
+//    }
+//  },
+//  // 每个 profile 包含不同的启动配置文件，比如 iis express 服务器和项目自身 kestrel 服务器，可独立配置环境变量、启动 url、执行方式等等
+//  "profiles": {
+//    // 在开发模式下，无论是否启用 https 重定向中间件，自动运行浏览器，不优先访问 http://applicationurl/launchurl swagger 网页
+//    "http": {
+//      "commandName": "Project",
+//      "dotnetRunMessages": true,
+//      "launchBrowser": true,
+//      "launchUrl": "swagger",
+//      "applicationUrl": "http://localhost:5212",
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Development"
+//      }
+//    },
+//    // 在开发模式下，无论是否启用 https 重定向中间件，自动运行浏览器，优先访问 https://applicationurl/launchurl swagger 网页
+//    // 如果 profile 没有正确配置 https 端口，控制台会出现警告：httpsredirectionmiddleware 无法确定重定向的 https 端口
+//    // warn: microsoft.aspnetcore.httpspolicy.httpsredirectionmiddleware[3]
+//    // failed to determine the https port for redirect.
+//    "https": {
+//      "commandName": "Project",
+//      "dotnetRunMessages": true,
+//      "launchBrowser": true,
+//      "launchUrl": "swagger",
+//      "applicationUrl": "https://localhost:7094;http://localhost:5212",
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Development"
+//      }
+//    },
+//    "IIS Express": {
+//      "commandName": "IISExpress",
+//      "launchBrowser": true,
+//      "launchUrl": "swagger",
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Development"
+//      }
+//    }
+//  }
+//}
+
+{
   "profiles": {
-    "http": {
-      "commandName": "Project",
+    "LED.Web.API": {
+      "commandName": "Project",                   // 指定启动方式：project（kestrel）、iisexpress、executable 等
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5212",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7094;http://localhost:5212",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
+      "launchBrowser": true,                      // 启动时是否自动打开浏览器
+      "launchUrl": "swagger",                     // 浏览器默认访问 url:端口/swagger
+      "applicationUrl": "http://localhost:7836",  // 指定监听的 url 和端口
+      "environmentVariables": {                   // 设置环境变量，优先级高于系统环境变量
+        //  开发环境设置 aspnetcore_environment 为 development，这样应用程序会加载开发相关的配置，比如更详细的错误信息
+        //  生产环境设置 aspnetcore_environment 为 production， 这样应用程序会启用不同中间件配置，比如更严格的安全设置
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
