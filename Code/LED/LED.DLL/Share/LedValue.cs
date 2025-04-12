@@ -1,11 +1,17 @@
-﻿namespace LED.DLL;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace LED.DLL;
 
 public class LedValue
 {
     /// <summary>
-    /// 控制卡 IP 地址
+    /// 从 appsettings.json 获取控制卡 IP 地址
     /// </summary>
-    public string controlCardIP = "192.168.0.100";
+    public string controlCardIP = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .Build()
+        .GetSection("ControlCardSettings")["ControlCardIP"]!;
 
     // 与控制卡通信所用的网络通信协议 net protocol
     public int UDP = 1; // UDP 协议

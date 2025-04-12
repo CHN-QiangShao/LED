@@ -1,15 +1,8 @@
-﻿using System.Runtime.InteropServices;
-
-namespace LED.DLL;
+﻿namespace LED.DLL;
 
 public class LedScreen
 {
     LedValue ledValue = new LedValue();
-
-    // 声明非托管函数
-    [DllImport("QYLED.dll", CallingConvention = CallingConvention.StdCall)]
-    // 发送实时采集（UDP；TCP）
-    public static extern int SendCollectionData_Net(string TshowContent, string TIP, int TnetProtocol, int TtypeNo, int TfontColor, int TfontBody, int TfontSize);
 
     // 定义成员字段
     private string _ip;         // 控制卡 ip 地址
@@ -20,7 +13,7 @@ public class LedScreen
     private int _size;          // 字体大小
 
     // 定义成员属性
-    public string Ip { get; set; } = string.Empty;
+    public string Ip { get => _ip; set => _ip = value; }
     public int NetProtocol { get => _netProtocol; set => _netProtocol = value; }
     public int Uid { get => _uid; set => _uid = value; }
     public int Color { get => _color; set => _color = value; }
@@ -50,7 +43,7 @@ public class LedScreen
         for (int i = 0; i < 4; i++)
         {
             // 调用非托管函数
-            ret = SendCollectionData_Net(content[i], ledValue.controlCardIP, ledValue.UDP, ledValue.uid + i, ledValue.green, ledValue.songFont, ledValue.twelveSquared);
+            ret = QYLED_DLL.SendCollectionData_Net(content[i], ledValue.controlCardIP, ledValue.UDP, ledValue.uid + i, ledValue.green, ledValue.songFont, ledValue.twelveSquared);
             if (ret == 0)
             {
                 Console.WriteLine("成功");
