@@ -1,3 +1,5 @@
+using LED.DLL;
+
 namespace LED.Web.API;
 
 public class Program
@@ -12,6 +14,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer(); // 添加 API 端点元数据服务，  用于支持 swagger
         builder.Services.AddSwaggerGen();           // 添加 swagger 文档生成服务，用于生成 API 文档
+        builder.Services.AddHostedService<ShowContent>();   // 添加后台服务
 
         // 3、构建 web 应用程序
         var app = builder.Build();
