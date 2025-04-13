@@ -35,10 +35,14 @@ public class LedController : ControllerBase
     /// </summary>
     /// <param name="requestBody">RequestBody 类的 json 格式的请求体</param>
     /// <returns>ResponseBody 类的字段</returns>
-    [HttpPost("Display")]                                           // 启用 HttpPost 属性，              定义 POST 端点为 ip:port/API/Led/Display
-    [ProducesResponseType(typeof(ResponseBody), 200)]               // 启用 ProducesResponseType 属性，  定义成功响应类型：200+ResponseBody 自定义响应体
-    [ProducesResponseType(typeof(ValidationProblemDetails), 422)]   // 启用 ProducesResponseType 属性，  定义失败响应类型：422+ValidationProblemDetails 标准响应体
-    [ProducesResponseType(typeof(ProblemDetails), 500)]             // 启用 ProducesResponseType 属性，  定义失败响应类型：500+ProblemDetails 标准响应体
+    //[HttpPost("Display")]                                           // 启用 HttpPost 属性，              定义 POST 端点为 ip:port/API/Led/Display
+    //[ProducesResponseType(typeof(ResponseBody), 200)]               // 启用 ProducesResponseType 属性，  定义成功响应类型：200+ResponseBody 自定义响应体
+    //[ProducesResponseType(typeof(ValidationProblemDetails), 422)]   // 启用 ProducesResponseType 属性，  定义失败响应类型：422+ValidationProblemDetails 标准响应体
+    //[ProducesResponseType(typeof(ProblemDetails), 500)]             // 启用 ProducesResponseType 属性，  定义失败响应类型：500+ProblemDetails 标准响应体
+    [HttpPost("Display")]                               // 启用 HttpPost 属性，              定义 POST 端点为 ip:port/API/Led/Display
+    [ProducesResponseType(typeof(ResponseBody), 200)]   // 启用 ProducesResponseType 属性，  定义成功响应类型：200+ResponseBody 自定义响应体
+    [ProducesResponseType(typeof(ResponseBody), 422)]   // 启用 ProducesResponseType 属性，  定义失败响应类型：422+ResponseBody 自定义响应体
+    [ProducesResponseType(typeof(ResponseBody), 500)]   // 启用 ProducesResponseType 属性，  定义失败响应类型：500+ResponseBody 自定义响应体
     public IActionResult Display([FromBody] RequestBody requestBody)
     {
         // 从 WMS 获取到的数据源，如果数据为空/格式错误，会根据模型绑定，自动 400 错误，不会进入接口
@@ -82,50 +86,70 @@ public class LedController : ControllerBase
                 if (ex is BadImageFormatException)
                 {
                     retDetails = new List<string> {
-                            "原因：无法加载 x86 的 dll 到 x64 程序中",
-                            "解决：根据需求，鼠标右击控制台引用程序→属性→生成→选择正确的目标平台" };
+                        "无法加载 x86/x64 的 dll 到 x64/x86 程序中",
+                        "根据需求，鼠标右击控制台引用程序→属性→生成→选择正确的目标平台" };
                 }
                 else if (ex is DllNotFoundException)
                 {
                     retDetails = new List<string> {
-                            "原因：外部动态库不存在 bin/Release/net8.0 目录",
-                            "解决：请把动态库复制到 bin/Release/net8.0 目录"};
+                        "外部动态库不存在 bin/Release/net8.0 目录",
+                        "请把动态库复制到 bin/Release/net8.0 目录"};
                 }
                 else
                 {
-                    retDetails = new List<string> { "未知异常，可能是内存不足" };
+                    retDetails = new List<string> { 
+                        "未知异常",
+                        "可能是内存不足" };
                 }
                 // BadImageFormatException 和 DllNotFoundException 属于服务器配置或部署问题
                 // 400  Bad Request             客户端错误   请求本身存在语法错误或无效参数
                 // 422  Unprocessable Entity    客户端错误   请求本身数据语法正确但语义错误，导致业务逻辑校验失败
                 // 500  Internal Server Error   服务端错误   服务器在处理请求时发生意外错误
-                return StatusCode(500, new ProblemDetails
+                //return StatusCode(500, new ProblemDetails
+                //{
+                //    Detail = string.Join("；", retDetails),
+                //    Instance = $"{ex}"
+                //});
+                return StatusCode(500, new ResponseBody
                 {
-                    Detail = string.Join("；", retDetails),
-                    Instance = $"{ex}"
+                    code            = 500,
+                    errorMessage    = retDetails[0],
+                    message         = retDetails[1]
                 });
             }
             retDetails.Add(ret == 0 ? $"{showContent[i]} 下发成功" : $"{showContent[i]} 下发失败"); // 记录每个信息的发送结果
             // 只要任意一次调用非托管方法失败，立即返回 422 错误
             if (ret != 0)
             {
-                return StatusCode(422, new ValidationProblemDetails 
+                //return StatusCode(422, new ValidationProblemDetails 
+                //{
+                //    Detail = string.Join("；", retDetails),
+                //    Errors = new Dictionary<string, string[]>
+                //    {
+                //        { $"第 {i + 1} 行数据", new string[] { $"{retDetails[i]}" } }
+                //    }
+                //});
+                return StatusCode(422, new ResponseBody
                 {
-                    Detail = string.Join("；", retDetails),
-                    Errors = new Dictionary<string, string[]>
-                    {
-                        { $"第 {i + 1} 行数据", new string[] { $"{retDetails[i]}" } }
-                    }
+                    code            = 422,
+                    errorMessage    = $"第 {i + 1} 行数据发送失败",
+                    message         = string.Join("；", retDetails)
                 });
             }
         }
         //return Ok("所有信息已成功发送至 LED 显示屏");
+        //return StatusCode(200, new ResponseBody
+        //{
+        //    // LINQ 查询：检查 results 列表中是否存在任何包含【失败】字样的字符串。
+        //    // Any() 方法会遍历集合中的每个元素，只要找到一个满足条件的元素，Any() 就会返回 true。
+        //    isSuccess = !retDetails.Any(r => r.Contains("失败")),
+        //    details = retDetails
+        //});
         return StatusCode(200, new ResponseBody
         {
-            // LINQ 查询：检查 results 列表中是否存在任何包含【失败】字样的字符串。
-            // Any() 方法会遍历集合中的每个元素，只要找到一个满足条件的元素，Any() 就会返回 true。
-            isSuccess = !retDetails.Any(r => r.Contains("失败")),
-            details = retDetails
+            code            = 200,
+            errorMessage    = "",
+            message         = "所有信息已成功发送至 LED 显示屏"
         });
     }
 }

@@ -29,5 +29,3 @@ if __name__ == "__main__":
     remove_bin()                # 默认清理当前目录，可指定其他路径如 `remove_bin('/path/to/project')`
     remove_obj()                # 默认清理当前目录，可指定其他路径如 `remove_obj('/path/to/project')`
     remove_publish_profiles()   # 默认清理当前目录，可指定其他路径如 `remove_publish_profiles('/path/to/project')`
-
-    
