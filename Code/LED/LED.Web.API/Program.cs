@@ -1,3 +1,4 @@
+using System.Text;
 using LED.DLL;
 
 namespace LED.Web.API;
@@ -24,6 +25,7 @@ public class Program
         //builder.Services.AddHttpsRedirection(options => {
         //    options.HttpsPort = 7836;
         //});
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // 注册中文编码支持，增加 GBK 字符编码规则
 
         // 3、构建 web 应用程序
         var app = builder.Build();

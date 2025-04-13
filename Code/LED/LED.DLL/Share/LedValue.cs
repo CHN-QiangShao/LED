@@ -118,7 +118,7 @@ public class LedValue
     public int areaRotate               = 2; // 区域旋转
 
     /// <summary>
-    /// 12×12 字体模板下单行最多显示 10 个英文字符
+    /// 12×12 字体模板下单行最多显示 GBK 编码下字符串所占字节数
     /// </summary>
     public int longText = 10;
 }

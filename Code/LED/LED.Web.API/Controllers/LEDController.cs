@@ -1,6 +1,6 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using LED.DLL;
-using System.Text;
 
 namespace LED.Web.API.Controllers;
 
@@ -56,7 +56,7 @@ public class LedController : ControllerBase
         for (int i = 0; i < showContent.Length; i++)
         {
             // 如果超过屏幕单行显示字符就设置为从右向左移动滑动显示，否则为立即显示
-            isLongText = showContent[i].Length > _ledValue.longText;
+            isLongText = Encoding.GetEncoding("GBK").GetByteCount(showContent[i]) > _ledValue.longText;
             try
             {
                 ret = QYLED_DLL.SendInternalText_Net(
