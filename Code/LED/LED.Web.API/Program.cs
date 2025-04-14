@@ -31,14 +31,17 @@ public class Program
         var app = builder.Build();
 
         // 4、启用 http 请求处理管道中间件（中间件的启用是有顺序的）
-        if (app.Environment.IsDevelopment())
-        {
-            // 开发环境专用配置，不适用于生产/发布环境
-            app.UseSwagger();       // 启用 swagger json 文档端点中间件
-            app.UseSwaggerUI(c => { // 启用 swagger UI 交互界面中间件，默认路径为 /swagger
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LED API");   // 指定 Swagger UI 加载的 OpenAPI 规范文件路径，设置网页右上角 Select a definition 下拉项
-            });
-        }
+        app.UseSwagger();       // 启用 swagger json 文档端点中间件
+        app.UseSwaggerUI(c => { // 启用 swagger UI 交互界面中间件，默认路径为 /swagger
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "LED API");   // 指定 Swagger UI 加载的 OpenAPI 规范文件路径，设置网页右上角 Select a definition 下拉项
+        });
+
+        //if (app.Environment.IsDevelopment())
+        //{
+        //    // 开发环境专用配置，不适用于生产/发布环境
+        //    app.UseSwagger();       // 启用 swagger json 文档端点中间件
+        //    app.UseSwaggerUI();     // 启用 swagger UI 交互界面中间件，默认路径为 /swagger
+        //}
 
         //app.UseHttpsRedirection();  // 启用 https 重定向中间件， 强制将所有 http 请求重定向到 https，安全访问链接
         app.UseAuthorization();     // 启用 授权中间件，         身份验证/授权，授权在重定向之前启用

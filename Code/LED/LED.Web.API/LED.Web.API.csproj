@@ -21,11 +21,19 @@
     <Folder Include="log\" />
   </ItemGroup>
 	
-  <Target Name="CopyLibs" AfterTargets="Build">
+  <Target Name="CopyLibsOnBuild" AfterTargets="Build">
     <ItemGroup>
       <LibFiles Include="$(ProjectDir)Libs\*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(LibFiles)" DestinationFolder="$(OutputPath)" />
+  </Target>
+
+  <!--MSBuild 不允许同一个项目文件中存在同名的 Target Name，这样后面的会覆盖前面的，导致复制不成功。-->
+  <Target Name="CopyLibsOnPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <LibFiles Include="$(ProjectDir)Libs\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LibFiles)" DestinationFolder="$(PublishDir)" />
   </Target>
 	
 </Project>
